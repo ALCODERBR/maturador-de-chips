@@ -32,6 +32,9 @@ class QFilters(QtCore.QObject):
         if event.type() == event.MouseButtonPress and self.parent().VersionLabel == obj:
             self.parent().controller.show_version(self.parent())
 
+        if event.type() == event.MouseButtonPress and self.parent().startMatutarationLabel == obj:
+            self.parent().controller.start_maturation(self.parent())
+
         return super().eventFilter(obj,event)
     
 class Ui_home(QtWidgets.QMainWindow):
@@ -222,8 +225,8 @@ class Ui_home(QtWidgets.QMainWindow):
         self.see_accounts_label.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextSelectableByMouse)
         self.see_accounts_label.setObjectName("see_accounts_label")
         
-        self.DeveloperLabel_4 = QtWidgets.QLabel(self.centralwidget)
-        self.DeveloperLabel_4.setGeometry(QtCore.QRect(170, 420, 81, 61))
+        self.startMatutarationLabel = QtWidgets.QLabel(self.centralwidget)
+        self.startMatutarationLabel.setGeometry(QtCore.QRect(170, 420, 81, 61))
         
         font = QtGui.QFont()
         font.setFamily("Arial Black")
@@ -231,11 +234,11 @@ class Ui_home(QtWidgets.QMainWindow):
         font.setBold(True)
         font.setWeight(75)
 
-        self.DeveloperLabel_4.setFont(font)
-        self.DeveloperLabel_4.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.DeveloperLabel_4.setStyleSheet("    font-size: 12px;\n""    font-weight: bold;\n""    color:rgb(117, 117, 117);\n""background:rgb(26, 26, 26);")
-        self.DeveloperLabel_4.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextSelectableByMouse)
-        self.DeveloperLabel_4.setObjectName("DeveloperLabel_4")
+        self.startMatutarationLabel.setFont(font)
+        self.startMatutarationLabel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.startMatutarationLabel.setStyleSheet("    font-size: 12px;\n""    font-weight: bold;\n""    color:rgb(117, 117, 117);\n""background:rgb(26, 26, 26);")
+        self.startMatutarationLabel.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextSelectableByMouse)
+        self.startMatutarationLabel.setObjectName("startMatutarationLabel")
         
         self.ChangeAfterMessages = QtWidgets.QSpinBox(self.centralwidget)
         self.ChangeAfterMessages.setGeometry(QtCore.QRect(10, 150, 91, 22))
@@ -309,7 +312,7 @@ class Ui_home(QtWidgets.QMainWindow):
         self.label_6.setText(_translate("MainWindow", "Arquivo de mensagens :"))
         self.toolButton.setText(_translate("MainWindow", "..."))
         self.see_accounts_label.setText(_translate("MainWindow", "   Contas\n""conectadas "))
-        self.DeveloperLabel_4.setText(_translate("MainWindow", "   Iniciar\n""Maturador"))
+        self.startMatutarationLabel.setText(_translate("MainWindow", "   Iniciar\n""Maturador"))
         self.label_7.setText(_translate("MainWindow", "Trocar de conta após o envio de:"))
         self.label_8.setText(_translate("MainWindow", "mensagens "))
 
@@ -347,6 +350,7 @@ class Ui_home(QtWidgets.QMainWindow):
         self.VersionLabel.installEventFilter(self.event_filter)
         self.NumbersLabel.installEventFilter(self.event_filter)
         self.LicenseLabel.installEventFilter(self.event_filter)
+        self.startMatutarationLabel.installEventFilter(self.event_filter)
 
         self.MinInterval.setValue(
             self.controller.get_preference('MinInterval', 67)

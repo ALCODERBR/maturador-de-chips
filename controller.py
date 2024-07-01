@@ -1,5 +1,5 @@
-import json
 from PyQt5 import QtWidgets, QtCore, QtWebEngineWidgets, QtGui
+import json
 
 import shutil
 import os
@@ -37,10 +37,39 @@ class Controller(QtCore.QObject):
         self.windows['home'].setWindowIcon(self.ICON)
         self.windows['home'].setWindowTitle("Maturador de chips")
 
+    def work_ui(self):
+        self.windows['work'].setupUi(self)
+        self.windows['work'].show()
+        self.windows['work'].activateWindow()
+        self.windows['work'].setWindowIcon(self.ICON)
+        self.windows['work'].setWindowTitle("Maturador de chips")
+
     def destroy_ui(self, name:str):
         if self.windows.get(name, False):
             win:QtWidgets.QMainWindow = self.windows.get(name)
             win.deleteLater()
+            self.windows.pop(name)
+    
+    # TODO
+    def start_maturation(self,  parent:QtWidgets.QWidget):
+        accounts_phone_numbers = [self.sessions[x]['phone'] for x in self.sessions if self.sessions[x].get('phone', False) and not self.sessions[x].get('marked_remove', False)]
+        accounts_phone_numbers = list(set(accounts_phone_numbers))
+        if not accounts_phone_numbers or len(accounts_phone_numbers) < 2:
+              return self.show_messagebox(
+                   parent,
+                   "Maturador de Chips",
+                   "A quantidade de contas minima para iniciar maturação não foi atigindo.\nConecte 2 contas ou mais e tente novamente."  
+        )
+        self.windows['home'].hide()
+        self.work_ui()
+
+    def maturation_status_update(self, sender, receiver, message, time):
+        row_position = self.windows['work'].table.rowCount()
+        self.windows['work'].table.insertRow(row_position)
+        self.windows['work'].table.setItem(row_position, 0, QtWidgets.QTableWidgetItem(sender))
+        self.table.setItem(row_position, 1, QtWidgets.QTableWidgetItem(receiver))
+        self.table.setItem(row_position, 2, QtWidgets.QTableWidgetItem(message))
+        self.windows['work'].table.setItem(row_position, 3, QtWidgets.QTableWidgetItem(time))
     
     def show_version(self, parent:QtWidgets.QWidget):
             message_box = QtWidgets.QMessageBox(parent)

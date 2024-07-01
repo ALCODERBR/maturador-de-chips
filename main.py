@@ -36,7 +36,8 @@ if __name__ == '__main__':
     controller.windows.update({
         'accounts': ui.Ui_accounts(),
         'main': ui.Ui_start(controller),
-        'home': ui.Ui_home()
+        'home': ui.Ui_home(),
+        'work': ui.Ui_work()
     })
     controller.start_ui()
     app.destroyed.connect(lambda _: controller.delete_sessions() )
