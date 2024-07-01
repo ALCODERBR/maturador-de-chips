@@ -112,7 +112,7 @@ class Controller(QtCore.QObject):
             message_box = QtWidgets.QMessageBox(parent)
             message_box.setStyleSheet("background-color:#fff;")
             try:
-                response = requests.get("https://api.github.com/repos/C0D3RBR/maturador-de-chips/releases/latest")
+                response = requests.get("https://api.github.com/repos/ALCODERBR/maturador-de-chips/releases/latest")
                 if response.json()['tag_name'] == self.VERSION:
                     message_box.about(
                         message_box,
@@ -125,7 +125,7 @@ class Controller(QtCore.QObject):
                         f'versão do software',
                         f'{self.VERSION} (nova atualização {response.json()["tag_name"]} disponível )'
                     )
-                    webbrowser.open("https://api.github.com/repos/C0D3RBR/maturador-de-chips/releases/latest")
+                    webbrowser.open("https://api.github.com/repos/ALCODERBR/maturador-de-chips/releases/latest")
                                 
             except:
                 message_box.about(

@@ -15,10 +15,10 @@ class QFilters(QtCore.QObject):
             self.parent().controller.accounts_ui()
         
         if event.type() == event.MouseButtonPress and self.parent().DeveloperLabel == obj:
-            webbrowser.open('https://github.com/C0D3RBR')
+            webbrowser.open('https://github.com/ALCODERBR')
         
         if event.type() == event.MouseButtonPress and self.parent().IssuesLabel == obj:
-            webbrowser.open('https://github.com/C0D3RBR/maturador-de-chips/issues')
+            webbrowser.open('https://github.com/ALCODERBR/maturador-de-chips/issues')
 
         if event.type() == event.MouseButtonPress and self.parent().NumbersLabel == obj:
             if os.path.exists(os.path.join(os.environ['APPDATA'], 'Telegram Desktop')):
@@ -27,7 +27,7 @@ class QFilters(QtCore.QObject):
                 webbrowser.open('https://t.me/NotzSMSBot?start=6455672508')
 
         if event.type() == event.MouseButtonPress and self.parent().LicenseLabel == obj:
-            webbrowser.open(url="https://github.com/C0D3RBR/maturador-de-chips/blob/main/LICENSE")
+            webbrowser.open(url="https://github.com/ALCODERBR/maturador-de-chips/blob/main/LICENSE")
 
         if event.type() == event.MouseButtonPress and self.parent().VersionLabel == obj:
             self.parent().controller.show_version(self.parent())
