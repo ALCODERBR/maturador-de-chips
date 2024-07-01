@@ -154,8 +154,9 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# program webview sessions
+# program webview sessions and preferences
 /WhatsApp
+/_preference
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can

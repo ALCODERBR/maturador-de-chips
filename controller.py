@@ -153,12 +153,14 @@ class Controller(QtCore.QObject):
             )
 
     def get_preference(self, name:str, default):
-            if QtCore.QSettings('_preference').value(name):
-                return  QtCore.QSettings('_preference').value(name)
+            preference_path = os.path.join(os.getcwd() , '_preference' )
+            if QtCore.QSettings(preference_path, QtCore.QSettings.IniFormat).value(name):
+                return  QtCore.QSettings(preference_path, QtCore.QSettings.IniFormat).value(name)
             return self.set_preference(name, default)
 
     def set_preference(self, name:str, value):
-            QtCore.QSettings('_preference').setValue(name, value)
+            preference_path = os.path.join(os.getcwd() , '_preference' )
+            QtCore.QSettings(preference_path,  QtCore.QSettings.IniFormat).setValue(name, value)
             return value
 
     def umount_webviews(self):
