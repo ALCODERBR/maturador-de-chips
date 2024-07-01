@@ -32,6 +32,10 @@ class QFilters(QtCore.QObject):
         if event.type() == event.MouseButtonPress and self.parent().VersionLabel == obj:
             self.parent().controller.show_version(self.parent())
 
+        if event.type() == event.MouseButtonPress and self.parent().LibsLabel == obj:
+            file_path = os.path.join(os.getcwd(), 'libs-open-source.html')
+            webbrowser.open('file://' + file_path)
+
         if event.type() == event.MouseButtonPress and self.parent().startMatutarationLabel == obj:
             self.parent().controller.start_maturation(self.parent())
 
