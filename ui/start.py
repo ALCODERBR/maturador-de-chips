@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtWidgets, QtWebEngineWidgets
+from PyQt5 import QtCore, QtWidgets, QtWebEngineWidgets, QtWebChannel
 from controller import Controller
 import requests
 import os
@@ -84,6 +84,7 @@ class Ui_start(QtWidgets.QMainWindow):
             profile.setPersistentCookiesPolicy(QtWebEngineWidgets.QWebEngineProfile.AllowPersistentCookies)
             profile.setHttpAcceptLanguage("pt-br")
             engine = QtWebEngineWidgets.QWebEnginePage(profile, webview)
+            profile.setHttpUserAgent(os.environ['user-agent'])
             webview.setPage(engine)
             webview.load(QtCore.QUrl('https://web.whatsapp.com/'))
             webview.page().loadFinished.connect(lambda ok, index=index, id=session_id, t_sessions=total_sessions: 
@@ -94,8 +95,6 @@ class Ui_start(QtWidgets.QMainWindow):
                 'index': index,
                 'webview': webview,
                 'full_session_id': full_session_id
-
-
             }
         else:
             self.progressBar.setProperty('value', 100)
@@ -104,6 +103,12 @@ class Ui_start(QtWidgets.QMainWindow):
         self.loaded_sessions = 0
 
     def on_webview_load_finished(self, ok, index, id, t_sessions, progress_bar_increment):
+        webview:QtWebEngineWidgets.QWebEngineView = self.controller.sessions[id]['webview']
+        channel = QtWebChannel.QWebChannel(webview.page())
+        channel.registerObject("controller", self.controller)
+        webview.page().setWebChannel(channel)
+        webview.page().runJavaScript(open(file="js\qwebchannel.js", mode="r", encoding="utf8").read() )
+        webview.page().runJavaScript(open(file="js\login.js", mode="r", encoding="utf8").read().replace("@INSTANCEID", id) )        
         current_value = self.progressBar.value()
         self.loaded_sessions +=1
         self.progressBar.setProperty('value', int(current_value) + int(progress_bar_increment))

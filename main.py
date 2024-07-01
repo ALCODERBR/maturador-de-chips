@@ -12,8 +12,10 @@ parser.add_argument('-o', '--output-default',action='store_true', help='Usar a s
 parser.add_argument('-f', '--output-file', type=str, help='Escolha o arquivo de saída para terminal', default=os.path.join(os.getcwd(), 'logs.log'))
 parser.add_argument('-w', '--web-engine-flags', type=str, help='Mais informações em https://doc.qt.io/qt-6/qtwebengine-debugging.html', default='')
 parser.add_argument('-s', '--session-path', type=str, help='Caminho onde sessão do WhatsApp está armazenada', default=os.path.join(os.getcwd(), 'WhatsApp'))
-args = parser.parse_args()
+parser.add_argument('-u', '--user-agent', type=str, help='Http user agent para qtwebengine profile', default="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
 
+args = parser.parse_args()
+os.environ['user-agent'] = args.user_agent
 os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = args.web_engine_flags
 
 if not os.path.exists(args.session_path):

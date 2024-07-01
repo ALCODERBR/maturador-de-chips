@@ -207,7 +207,6 @@ class Ui_home(QtWidgets.QMainWindow):
         self.tableView_2.setGeometry(QtCore.QRect(10, 410, 261, 81))
         self.tableView_2.setStyleSheet("background:rgb(26, 26, 26);\n""border-radius:15px;")
         self.tableView_2.setObjectName("tableView_2")
-
         self.see_accounts_label = QtWidgets.QLabel(self.centralwidget)
         self.see_accounts_label.setGeometry(QtCore.QRect(45, 420, 91, 61))
         

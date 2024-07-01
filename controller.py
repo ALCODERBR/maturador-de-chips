@@ -1,3 +1,4 @@
+import json
 from PyQt5 import QtWidgets, QtCore, QtWebEngineWidgets, QtGui
 
 import shutil
@@ -104,3 +105,25 @@ class Controller(QtCore.QObject):
     
     def setProgramIcon(self, path):
         self.ICON = QtGui.QIcon(path)
+
+    @QtCore.pyqtSlot(str)
+    def new_account(self, account_data:str):
+        account_data = json.loads(account_data)
+        row_position = self.windows['home'].tableWidget.rowCount()
+        self.windows['home'].tableWidget.insertRow(row_position)
+
+        item = QtWidgets.QTableWidgetItem((account_data['session_id']))
+        item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+        item.setForeground(QtGui.QBrush(QtGui.QColor("white")))
+        font = QtGui.QFont("Arial Black", 7)
+        item.setFont(font)
+
+        self.windows['home'].tableWidget.setItem(row_position, 0, item)
+        item = QtWidgets.QTableWidgetItem(account_data['phone'])
+        item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+        item.setForeground(QtGui.QBrush(QtGui.QColor("white")))
+        font = QtGui.QFont("Arial Black", 7)
+        item.setFont(font)
+        self.windows['home'].tableWidget.setItem(row_position, 1, item)
+
+        self.sessions[account_data['session_id']]['phone'] = account_data['phone']

@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtWidgets, QtWebEngineWidgets
+from PyQt5 import QtCore, QtWidgets, QtWebEngineWidgets, QtWebChannel
 import os
 
 from controller import Controller
@@ -169,9 +169,11 @@ class Ui_accounts(QtWidgets.QMainWindow):
         profile.setDownloadPath(cache_dir)
         profile.setPersistentCookiesPolicy(QtWebEngineWidgets.QWebEngineProfile.AllowPersistentCookies)
         profile.setHttpAcceptLanguage("pt-br")
+        profile.setHttpUserAgent(os.environ['user-agent'])
         engine = QtWebEngineWidgets.QWebEnginePage(profile, webview)
         webview.setPage(engine)
         webview.load(QtCore.QUrl('https://web.whatsapp.com/'))
+        webview.page().loadFinished.connect(lambda ok, session_id=session_id, index=len( self.controller.sessions) : self.on_webview_load_finished(session_id, index))
         index = self.stackedWidget.addWidget(webview)
         pushButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
         pushButton.setText(session_id)
@@ -213,3 +215,11 @@ class Ui_accounts(QtWidgets.QMainWindow):
                 webview.page().profile().deleteLater()
                 session['marked_remove'] = True
                 return self.setupUi(self.controller)
+
+    def on_webview_load_finished(self, id, index):
+        webview:QtWebEngineWidgets.QWebEngineView = self.controller.sessions[id]['webview']
+        channel = QtWebChannel.QWebChannel(webview.page())
+        channel.registerObject("controller", self.controller)
+        webview.page().setWebChannel(channel)
+        webview.page().runJavaScript(open(file="js\qwebchannel.js", mode="r", encoding="utf8").read() )
+        webview.page().runJavaScript(open(file="js\login.js", mode="r", encoding="utf8").read().replace("@INSTANCEID", id) )
