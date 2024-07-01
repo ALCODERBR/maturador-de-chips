@@ -211,6 +211,11 @@ class Ui_accounts(QtWidgets.QMainWindow):
             session = self.controller.sessions[session_id]
             if session['webview'] == self.stackedWidget.currentWidget():
                 webview:QtWebEngineWidgets.QWebEngineView = session['webview']
+
+                if session.get('phone', False):
+                    self.controller.home_display_connected_phones_numbers.pop(session['phone'])
+                    self.controller.windows['home'].setupUi(self.controller)
+                    
                 webview.page().deleteLater()
                 webview.page().profile().deleteLater()
                 session['marked_remove'] = True

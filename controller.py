@@ -12,6 +12,7 @@ class Controller(QtCore.QObject):
         super().__init__()
         self.ICON:QtGui.QIcon
         self.VERSION = VERSION
+        self.home_display_connected_phones_numbers = {}
         self.windows = {}
         self.sessions = {}
     
@@ -31,7 +32,6 @@ class Controller(QtCore.QObject):
 
     def home_ui(self):
         self.windows['home'].setupUi(self)
-        self.windows['home'].show()
         self.windows['home'].show()
         self.windows['home'].activateWindow()
         self.windows['home'].setWindowIcon(self.ICON)
@@ -112,7 +112,7 @@ class Controller(QtCore.QObject):
         row_position = self.windows['home'].tableWidget.rowCount()
         self.windows['home'].tableWidget.insertRow(row_position)
 
-        item = QtWidgets.QTableWidgetItem((account_data['session_id']))
+        item = QtWidgets.QTableWidgetItem(account_data['session_id'])
         item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
         item.setForeground(QtGui.QBrush(QtGui.QColor("white")))
         font = QtGui.QFont("Arial Black", 7)
@@ -127,3 +127,6 @@ class Controller(QtCore.QObject):
         self.windows['home'].tableWidget.setItem(row_position, 1, item)
 
         self.sessions[account_data['session_id']]['phone'] = account_data['phone']
+        self.home_display_connected_phones_numbers.update({
+            account_data['phone']:account_data['session_id']
+        })

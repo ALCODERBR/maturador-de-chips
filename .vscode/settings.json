@@ -1,0 +1,16 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "ui/home": true,
+        "ui/start": true,
+        "ui/accounts": true,
+        "**/__pycache__": true,
+        "**/WhatsApp":true,
+        "**/venv": true,
+    }
+}

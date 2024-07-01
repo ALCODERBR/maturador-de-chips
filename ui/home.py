@@ -319,8 +319,27 @@ class Ui_home(QtWidgets.QMainWindow):
         item.setText(_translate("MainWindow", "Telefone "))
 
         self.label_9.setText(_translate("MainWindow", "Parar após atingir esse numero de mensagens  :"))
-        self.label_10.setText(_translate("MainWindow", "mensagens ")
-                              )
+        self.label_10.setText(_translate("MainWindow", "mensagens "))
+
+        for phone_number in self.controller.home_display_connected_phones_numbers:
+            session_id = self.controller.home_display_connected_phones_numbers[phone_number]
+            row_position = self.tableWidget.rowCount()
+            self.tableWidget.insertRow(row_position)
+
+            item = QtWidgets.QTableWidgetItem(session_id)
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            item.setForeground(QtGui.QBrush(QtGui.QColor("white")))
+            font = QtGui.QFont("Arial Black", 7)
+            item.setFont(font)
+
+            self.tableWidget.setItem(row_position, 0, item)
+            item = QtWidgets.QTableWidgetItem(phone_number)
+            item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEditable)
+            item.setForeground(QtGui.QBrush(QtGui.QColor("white")))
+            font = QtGui.QFont("Arial Black", 7)
+            item.setFont(font)
+            self.tableWidget.setItem(row_position, 1, item)
+
         self.DeveloperLabel.installEventFilter(self.event_filter)
         self.see_accounts_label.installEventFilter(self.event_filter)
         self.IssuesLabel.installEventFilter(self.event_filter)
