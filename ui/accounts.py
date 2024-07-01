@@ -171,7 +171,7 @@ class Ui_accounts(QtWidgets.QMainWindow):
         profile.setHttpAcceptLanguage("pt-br")
         engine = QtWebEngineWidgets.QWebEnginePage(profile, webview)
         webview.setPage(engine)
-        webview.load(QtCore.QUrl('https://google.com'))
+        webview.load(QtCore.QUrl('https://web.whatsapp.com/'))
         index = self.stackedWidget.addWidget(webview)
         pushButton = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
         pushButton.setText(session_id)

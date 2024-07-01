@@ -85,7 +85,7 @@ class Ui_start(QtWidgets.QMainWindow):
             profile.setHttpAcceptLanguage("pt-br")
             engine = QtWebEngineWidgets.QWebEnginePage(profile, webview)
             webview.setPage(engine)
-            webview.load(QtCore.QUrl('https://google.com'))
+            webview.load(QtCore.QUrl('https://web.whatsapp.com/'))
             webview.page().loadFinished.connect(lambda ok, index=index, id=session_id, t_sessions=total_sessions: 
                 self.on_webview_load_finished(ok, index, id, t_sessions, progress_bar_increment))
             
