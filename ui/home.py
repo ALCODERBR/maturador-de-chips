@@ -299,7 +299,7 @@ class Ui_home(QtWidgets.QMainWindow):
 
         self.MessageMethod.setItemText(0, _translate("MainWindow", "Arquivo de mensagem "))
         self.MessageMethod.setItemText(1, _translate("MainWindow", "ChatGpt (official)"))
-        self.MessageMethod.setItemText(2, _translate("MainWindow", "ChatGpt (official)"))
+        self.MessageMethod.setItemText(2, _translate("MainWindow", "Lorem Ipsum API"))
 
         self.label_5.setText(_translate("MainWindow", "chave da API:"))
 
@@ -399,7 +399,11 @@ class Ui_home(QtWidgets.QMainWindow):
 
         self.MessageMethod.currentIndexChanged.connect(
             lambda status : self.message_method_event(status))
-        self.token.textChanged.connect(lambda text: self.token_change_event(text))
+        
+        self.token.textChanged.connect(
+            lambda text: self.token_change_event(text)
+        
+        )
 
         self.MessageMethod.setCurrentIndex(
             self.controller.get_preference('MessageMethod', 0) 
@@ -415,14 +419,18 @@ class Ui_home(QtWidgets.QMainWindow):
             self.file_path.setText(self.controller.get_preference('file_path', ''))
             self.token.setEnabled(False)
             return
-        self.token.setText(self.controller.get_preference('token', '')) if index == 1 else self.token.setText(self.controller.get_preference('token2', ''))
-        self.toolButton.setEnabled(False)
-        self.token.setEnabled(True)
         
+        if index == 1:
+            self.token.setText(self.controller.get_preference('token', ''))
+            self.toolButton.setEnabled(False)
+            self.token.setEnabled(True)
+            return
+        
+        self.toolButton.setEnabled(False)
+        self.token.setEnabled(False)
+
     def token_change_event(self, text:str):
-        if self.MessageMethod.currentIndex() == 1:
-            return self.controller.set_preference('token', text)
-        return self.controller.set_preference('token2', text)
+        return self.controller.set_preference('token', text)
     
     def select_message_file(self):
         path = QtWidgets.QFileDialog.getOpenFileName(
