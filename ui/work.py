@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 
 from controller import Controller
 
@@ -26,5 +26,24 @@ class Ui_work(QtWidgets.QMainWindow):
         layout.addWidget(self.table)
 
         self.stopButton = QtWidgets.QPushButton('Parar')
-        self.stopButton.setStyleSheet("width:120px; background-color: #dc3545; color: #fff; border: none; border-radius: 5px; padding: 10px 0; font-size: 16px;")
+        self.stopButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.stopButton.setStyleSheet('''
+                QPushButton {
+                width:120px;
+                background-color: #dc3545;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 0;
+                font-size: 16px;
+                }
+                QPushButton:hover {
+                    background-color: rgb(205, 92, 92);
+                }
+        ''')
+        self.stopButton.clicked.connect(lambda: self.controller.stop_maturation_signal.emit())
         layout.addWidget(self.stopButton, alignment=QtCore.Qt.AlignCenter)
+
+    def closeEvent(self, event:QtCore.QEvent):
+        self.controller.umount_webviews()
+        event.accept()

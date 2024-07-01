@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, QtCore, QtWebEngineWidgets, QtGui
+from whatsapp import WhatsApp
 import json
 
 import shutil
@@ -8,13 +9,21 @@ import webbrowser
 import requests
 
 class Controller(QtCore.QObject):
+    show_messagebox_signal = QtCore.pyqtSignal(str, str, str)
+    stop_maturation_signal =  QtCore.pyqtSignal()
+
     def __init__(self, VERSION:str) -> None:
         super().__init__()
-        self.ICON:QtGui.QIcon
-        self.VERSION = VERSION
+        self.stop_maturation_signal.connect(lambda: self.stop_maturation() )
+        self.show_messagebox_signal.connect(lambda win_id, title, text:
+                self.show_messagebox(self.windows[win_id], title, text) )
         self.home_display_connected_phones_numbers = {}
-        self.windows = {}
+        self.session_id_of_accounts_blocked = []
+        self.whatssap_work:WhatsApp = None
+        self.VERSION = VERSION
+        self.ICON:QtGui.QIcon
         self.sessions = {}
+        self.windows = {}
     
     def accounts_ui(self):
         self.windows['accounts'].setupUi(self)
@@ -54,22 +63,50 @@ class Controller(QtCore.QObject):
     def start_maturation(self,  parent:QtWidgets.QWidget):
         accounts_phone_numbers = [self.sessions[x]['phone'] for x in self.sessions if self.sessions[x].get('phone', False) and not self.sessions[x].get('marked_remove', False)]
         accounts_phone_numbers = list(set(accounts_phone_numbers))
+        
         if not accounts_phone_numbers or len(accounts_phone_numbers) < 2:
               return self.show_messagebox(
                    parent,
                    "Maturador de Chips",
-                   "A quantidade de contas minima para iniciar maturação não foi atigindo.\nConecte 2 contas ou mais e tente novamente."  
+                   "A quantidade de contas minima para iniciar maturação não foi atigindo.\nConecte 2 contas ou mais e tente iniciar novamente."  
         )
-        self.windows['home'].hide()
+
+        message_method = self.get_preference("MessageMethod", 0)
+        file_path = self.get_preference("file_path", '')
+        api_token = self.get_preference('token', '')
+
+        if (message_method == 0 and (not file_path or not os.path.exists(file_path) or not open(file=file_path, mode='r', encoding='utf8').readlines() )) :
+            return self.show_messagebox(
+                    parent,
+                    "Maturador de Chips",
+                    "Arquivo para entrada de mensagens não foi selecionado ou está vazio."  
+            )
+
+        elif message_method == 1 and not api_token :
+            return self.show_messagebox(
+                    parent,
+                    "Maturador de Chips",
+                    "Token de autenticação para api.openai.com está vazio."  
+        )
+
+        file_content = open(file=file_path, mode='r', encoding='utf8').readlines() if message_method == 0 else []
+        self.whatssap_work = WhatsApp(self, message_method, file_content, api_token, accounts_phone_numbers)
         self.work_ui()
+        self.whatssap_work.start()
+        self.windows['home'].hide()
 
     def maturation_status_update(self, sender, receiver, message, time):
         row_position = self.windows['work'].table.rowCount()
         self.windows['work'].table.insertRow(row_position)
         self.windows['work'].table.setItem(row_position, 0, QtWidgets.QTableWidgetItem(sender))
-        self.table.setItem(row_position, 1, QtWidgets.QTableWidgetItem(receiver))
-        self.table.setItem(row_position, 2, QtWidgets.QTableWidgetItem(message))
+        self.windows['work'].table.setItem(row_position, 1, QtWidgets.QTableWidgetItem(receiver))
+        self.windows['work'].table.setItem(row_position, 2, QtWidgets.QTableWidgetItem(message))
         self.windows['work'].table.setItem(row_position, 3, QtWidgets.QTableWidgetItem(time))
+
+    def stop_maturation(self):
+        self.windows['work'].hide()
+        self.whatssap_work.terminate()
+        self.home_ui()
     
     def show_version(self, parent:QtWidgets.QWidget):
             message_box = QtWidgets.QMessageBox(parent)
@@ -159,3 +196,10 @@ class Controller(QtCore.QObject):
         self.home_display_connected_phones_numbers.update({
             account_data['phone']:account_data['session_id']
         })
+
+    @QtCore.pyqtSlot(str)
+    def account_blocked(self, account_data:str):
+        account_data = json.loads(account_data)
+        account_data['phone'] =  self.sessions[account_data['session_id']].pop('phone')
+        self.session_id_of_accounts_blocked.append(account_data['session_id'])
+        self.home_display_connected_phones_numbers.pop(account_data['phone'])
