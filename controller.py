@@ -89,6 +89,15 @@ class Controller(QtCore.QObject):
                     "Token de autenticação para api.openai.com está vazio."  
         )
 
+        if self.controller.get_preference('MinInterval', 67) >= self.controller.get_preference('MaxInterval', 90):
+            MinInterval = self.controller.get_preference('MinInterval', 67)
+            MaxInterval = self.controller.get_preference('MaxInterval', 90)
+            return self.show_messagebox(
+                    parent,
+                    "Maturador de Chips",
+                    f"Intervalo entre ações escolhido não é valido ({MinInterval} á {MaxInterval})"  
+        )
+
         file_content = open(file=file_path, mode='r', encoding='utf8').readlines() if message_method == 0 else []
         self.whatssap_work = WhatsApp(self, message_method, file_content, api_token, accounts_phone_numbers)
         self.work_ui()

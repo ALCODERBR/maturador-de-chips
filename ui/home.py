@@ -63,10 +63,12 @@ class Ui_home(QtWidgets.QMainWindow):
         self.MinInterval.setGeometry(QtCore.QRect(10, 90, 61, 22))
         self.MinInterval.setStyleSheet("background:rgb(255, 255, 255);")
         self.MinInterval.setObjectName("MinInterval")
+        self.MinInterval.setMinimum(1)
         self.MaxInterval = QtWidgets.QSpinBox(self.centralwidget)
         self.MaxInterval.setGeometry(QtCore.QRect(120, 90, 61, 22))
         self.MaxInterval.setStyleSheet("background:rgb(255, 255, 255);")
         self.MaxInterval.setObjectName("MaxInterval")
+        self.MaxInterval.setMinimum(2)
 
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(10, 60, 281, 20))
