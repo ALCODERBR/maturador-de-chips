@@ -125,21 +125,21 @@ class Controller(QtCore.QObject):
                 if response.json()['tag_name'] == self.VERSION:
                     message_box.about(
                         message_box,
-                        f'versão do software',
-                        f'{self.VERSION} (versão mais recente)'
+                        f'Versão do software',
+                        f'{self.VERSION} (Você já possui á versão mais recente)'
                     )
                 else :
                     message_box.about(
                         message_box,
-                        f'versão do software',
+                        f'Versão do software',
                         f'{self.VERSION} (nova atualização {response.json()["tag_name"]} disponível )'
                     )
-                    webbrowser.open("https://api.github.com/repos/ALCODERBR/maturador-de-chips/releases/latest")
+                    webbrowser.open(response.json()['html_url'])
                                 
             except:
                 message_box.about(
                     message_box,
-                    f'versão do software',
+                    f'Versão do software',
                     f'{self.VERSION} (não foi possível buscar por atualizações)'
                 )
 
