@@ -47,12 +47,12 @@ class WhatsApp(QtCore.QThread):
         super().__init__()
 
         self.controller = controller # type: controller.Controller
-        self.ContinueOnBlock = self.controller.get_preference('ContinueOnBlock', False) == 'true'
-        self.shutdown = self.controller.get_preference('Shutdown', False) == 'true'
-        self.ChangeAfterMessages = self.controller.get_preference('ChangeAfterMessages', 3)
-        self.MinInterval = self.controller.get_preference('MinInterval', 67)
-        self.MaxInterval = self.controller.get_preference('MaxInterval', 90)
-        self.MaxMessages = self.controller.get_preference('MaxMessages', 10)
+        self.ContinueOnBlock = self.controller.get_preference('ContinueOnBlock', False, bool)
+        self.shutdown = self.controller.get_preference('Shutdown', False, bool)
+        self.ChangeAfterMessages = self.controller.get_preference('ChangeAfterMessages', 3, int)
+        self.MinInterval = self.controller.get_preference('MinInterval', 67, int)
+        self.MaxInterval = self.controller.get_preference('MaxInterval', 90, int)
+        self.MaxMessages = self.controller.get_preference('MaxMessages', 10, int)
         self.accounts_phone_numbers = accounts_phone_numbers
         self.message_method = message_method
         self.current_sender_session = None

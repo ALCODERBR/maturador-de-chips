@@ -71,7 +71,7 @@ class Controller(QtCore.QObject):
                    "A quantidade de contas minima para iniciar maturação não foi atigindo.\nConecte 2 contas ou mais e tente iniciar novamente."  
         )
 
-        message_method = self.get_preference("MessageMethod", 0)
+        message_method = self.get_preference("MessageMethod", 0, int)
         file_path = self.get_preference("file_path", '')
         api_token = self.get_preference('token', '')
 
@@ -89,9 +89,9 @@ class Controller(QtCore.QObject):
                     "Token de autenticação para api.openai.com está vazio."  
         )
 
-        if self.controller.get_preference('MinInterval', 67) >= self.controller.get_preference('MaxInterval', 90):
-            MinInterval = self.controller.get_preference('MinInterval', 67)
-            MaxInterval = self.controller.get_preference('MaxInterval', 90)
+        if self.get_preference('MinInterval', 67, int) >= self.get_preference('MaxInterval', 90, int):
+            MinInterval = self.get_preference('MinInterval', 67, int)
+            MaxInterval = self.get_preference('MaxInterval', 90, int)
             return self.show_messagebox(
                     parent,
                     "Maturador de Chips",
@@ -152,10 +152,10 @@ class Controller(QtCore.QObject):
                 text
             )
 
-    def get_preference(self, name:str, default):
+    def get_preference(self, name:str, default, value_type = str):
             preference_path = os.path.join(os.getcwd() , '_preference' )
-            if QtCore.QSettings(preference_path, QtCore.QSettings.IniFormat).value(name):
-                return  QtCore.QSettings(preference_path, QtCore.QSettings.IniFormat).value(name)
+            if QtCore.QSettings(preference_path, QtCore.QSettings.IniFormat).value(name, type=value_type):
+                return  QtCore.QSettings(preference_path, QtCore.QSettings.IniFormat).value(name, type=value_type)
             return self.set_preference(name, default)
 
     def set_preference(self, name:str, value):

@@ -359,42 +359,42 @@ class Ui_home(QtWidgets.QMainWindow):
         self.startMatutarationLabel.installEventFilter(self.event_filter)
 
         self.MinInterval.setValue(
-            self.controller.get_preference('MinInterval', 67)
+            self.controller.get_preference('MinInterval', 67, int)
         )
         self.MinInterval.valueChanged.connect(
             lambda status:  self.controller.set_preference('MinInterval', status)
         )
 
         self.MaxInterval.setValue(
-            self.controller.get_preference('MaxInterval', 90)
+            self.controller.get_preference('MaxInterval', 90, int)
         )
         self.MaxInterval.valueChanged.connect(
             lambda status:  self.controller.set_preference('MaxInterval', status)
         )
         
         self.Shutdown.setChecked(
-            self.controller.get_preference('Shutdown', False) == 'true'
+            self.controller.get_preference('Shutdown', False, bool)
         )
         self.Shutdown.stateChanged.connect(
             lambda status:  self.controller.set_preference('shutdown', not status == 0)
         )
 
         self.ContinueOnBlock.setChecked(
-            self.controller.get_preference('ContinueOnBlock', False) == 'true'
+            self.controller.get_preference('ContinueOnBlock', False, bool) 
         )
         self.ContinueOnBlock.stateChanged.connect(
             lambda status:  self.controller.set_preference('ContinueOnBlock', not status == 0)
         )
 
         self.ChangeAfterMessages.setValue(
-            self.controller.get_preference('ChangeAfterMessages', 3)
+            self.controller.get_preference('ChangeAfterMessages', 3, int)
         )
 
         self.ChangeAfterMessages.valueChanged.connect(
             lambda status : self.controller.set_preference('ChangeAfterMessages', status)
         )
         self.MaxMessages.setValue(
-            self.controller.get_preference('MaxMessages', 10)
+            self.controller.get_preference('MaxMessages', 10, int)
         )
         self.MaxMessages.valueChanged.connect(
             lambda status : self.controller.set_preference('MaxMessages', status)
@@ -412,10 +412,10 @@ class Ui_home(QtWidgets.QMainWindow):
         )
 
         self.MessageMethod.setCurrentIndex(
-            self.controller.get_preference('MessageMethod', 0) 
+            self.controller.get_preference('MessageMethod', 0, int) 
         )
 
-        self.message_method_event( self.controller.get_preference('MessageMethod', 0))
+        self.message_method_event( self.controller.get_preference('MessageMethod', 0, int))
         self.toolButton.clicked.connect(lambda x: self.select_message_file())
 
     def message_method_event(self, index:int):
