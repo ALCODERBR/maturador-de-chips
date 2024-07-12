@@ -109,10 +109,14 @@ class Ui_start(QtWidgets.QMainWindow):
         channel.registerObject("controller", self.controller)
         webview.page().setWebChannel(channel)
         webview.page().runJavaScript(open(file="js\qwebchannel.js", mode="r", encoding="utf8").read() )
-        webview.page().runJavaScript(open(file="js\login.js", mode="r", encoding="utf8").read().replace("@INSTANCEID", id) )        
-        current_value = self.progressBar.value()
+        webview.page().runJavaScript(open(file="js\login.js", mode="r", encoding="utf8").read().replace("@INSTANCEID", id) )
+        try:
+            current_value = self.progressBar.value()
+            self.progressBar.setProperty('value', int(current_value) + int(progress_bar_increment))
+        except RuntimeError as e:
+            print(e)
+
         self.loaded_sessions +=1
-        self.progressBar.setProperty('value', int(current_value) + int(progress_bar_increment))
         if t_sessions == self.loaded_sessions :
             self.controller.destroy_ui('main')
             self.controller.home_ui()
