@@ -84,6 +84,7 @@ class Ui_start(QtWidgets.QMainWindow):
             profile.setPersistentCookiesPolicy(QtWebEngineWidgets.QWebEngineProfile.AllowPersistentCookies)
             profile.setHttpAcceptLanguage("pt-br")
             engine = QtWebEngineWidgets.QWebEnginePage(profile, webview)
+            engine.setAudioMuted(True)
             profile.setHttpUserAgent(os.environ['user-agent'])
             webview.setPage(engine)
             webview.load(QtCore.QUrl('https://web.whatsapp.com/'))

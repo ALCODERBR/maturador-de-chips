@@ -171,6 +171,7 @@ class Ui_accounts(QtWidgets.QMainWindow):
         profile.setHttpAcceptLanguage("pt-br")
         profile.setHttpUserAgent(os.environ['user-agent'])
         engine = QtWebEngineWidgets.QWebEnginePage(profile, webview)
+        engine.setAudioMuted(True)
         webview.setPage(engine)
         webview.load(QtCore.QUrl('https://web.whatsapp.com/'))
         webview.page().loadFinished.connect(lambda ok, session_id=session_id, index=len( self.controller.sessions) : self.on_webview_load_finished(session_id, index))
